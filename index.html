@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Captioning Tool Selector</title>
+  
+  <style> 
+	  body {
+	  font-family: Arial, sans-serif;
+	  margin: 0;
+	  padding: 0;
+	  background-color: #f4f4f4;
+	}
+
+	#app {
+	  max-width: 350px;
+	  margin: auto;
+	  padding: 20px;
+	  background-color: white;
+	  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+	  border-radius: 10px;
+	}
+
+	h1 {
+	  font-size: 1.5em;
+	  text-align: center;
+	  margin-bottom: 20px;
+	}
+
+	p {
+	  font-size: 1em;
+	  margin-bottom: 10px;
+	  max-width:330px;
+	}
+
+	button {
+	  display: block;
+	  width: 100%;
+	  margin: 10px 0;
+	  padding: 12px;
+	  font-size: 1em;
+	  font-weight: bold;
+	  background-color: #0078d4;
+	  color: white;
+	  border: none;
+	  border-radius: 5px;
+	  cursor: pointer;
+	}
+
+	button:hover {
+	  background-color: #005a9e;
+	}
+
+	video {
+	  width: 70%;
+	  margin-top: 10px;
+	  border-radius: 5px;
+	}
+ </style>
+</head>
+
+<body>
+  <h1>Find the right captioning tool</h1>
+  
+  <div id="app"> </div>
+  <script type="text/javascript">const app = document.getElementById('app');
+
+		function askQuestion(question, options) {
+		  app.innerHTML = `<p>${question}</p>`;
+		  options.forEach(opt => {
+			const btn = document.createElement('button');
+			btn.textContent = opt.label;
+			btn.onclick = () => opt.action();
+			app.appendChild(btn);
+		  });
+		}
+
+		function start() {
+		  askQuestion("Hi there! 👋 I'm here to help you choose the best captioning method for your teaching setup. Let's get started: Are you teaching online or in-person?", [
+			{ label: "Online", action: onlineFlow },
+			{ label: "In-person", action: inPersonFlow }
+		  ]);
+		}
+
+		function onlineFlow() {
+		  askQuestion("Which platform are you using?", [
+			{ label: "Microsoft Teams", action: () => showResult("Great! Your students can turn on live captions directly in Teams during your session. Watch this short video to see how.", "teams.mp4") },
+			{ label: "Collaborate Ultra", action: () => showResult("Collaborate Ultra doesn’t have built-in automatic captioning. But students can use live captions via Google Chrome. In this short video we will show you how to turn them on.", "collaborate.mp4") }
+		  ]);
+		}
+
+		function inPersonFlow() {
+		  askQuestion("Which presentation tool are you using?", [
+			{ label: "PowerPoint", action: () => showResult("Perfect! You can turn on subtitles directly in PowerPoint. This video will show you how.", "powerpoint.mp4") },
+			{ label: "Keynote", action: keynoteOptions }
+		  ]);
+		}
+
+		function keynoteOptions() {
+		  askQuestion("Keynote doesn’t have built-in live captioning. You have two options:", [
+			{ label: "Convert your Keynote presentation to PowerPoint and use subtitles", action: () => showResult("You can export your Keynote presentation as a PowerPoint file. Then open it in PowerPoint and turn on subtitles. Watch this short video to find out how.", "convert.mp4") },
+			{ label: "Present via Teams and turn on captions in the meeting", action: () => showResult("You can present your Keynote slides via Teams and turn on live captions during the session. Watch this short video to see how.", "teams.mp4") }
+		  ]);
+		}
+
+		function showResult(message, videoFile) {
+		  app.innerHTML = `<p>${message}</p>
+						   <video controls>
+							 <source src="${videoFile}" type="video/mp4">
+							 Your browser does not support the video tag.
+						   </video>
+						   <br><button onclick="start()">Start Over</button>`;
+		}
+
+		start();
+	</script>
+</body>
+</html>
